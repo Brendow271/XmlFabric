@@ -1,6 +1,9 @@
-#include <iostream>
+#include "xml.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    xmlForest forestLoad;
+    forestLoad.load("lab3.xml");
+    forestLoad.print();
+
     return 0;
 }
