@@ -3,4 +3,4 @@ project(XmlFabric)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(XmlFabric main.cpp xml.h xml.cpp)
+add_executable(XmlFabric main.cpp xml.h xml.cpp XML_Resourse.h XML_Resourse.cpp)

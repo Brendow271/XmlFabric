@@ -1,11 +1,11 @@
-#ifndef XMLFABRIC_XML_H
-#define XMLFABRIC_XML_H
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
+#include <functional>
 
 class TreeNode {
 public:
@@ -15,7 +15,8 @@ public:
 
     TreeNode(std::string t, std::string v) : tag(std::move(t)), value(std::move(v)) {}
     void addChild(std::unique_ptr<TreeNode> v) {children.push_back(std::move(v));}
-    std::string toString();
+    std::string toString(int depth);
+    void forEach(std::function <void (TreeNode*)>  callback);
 //    const std::string &getTag() const {
 //        return tag;
 //    }
@@ -31,23 +32,25 @@ public:
 
 class  xmlForest {
 public:
-    std::unique_ptr<TreeNode> root; //unique
+
     xmlForest() = default;
-    std:: string toStringForest(){return root->toString();}
+    std:: string toStringForest(){return rootNode->toString(0);}
     void save(const std::string& filename);
     void print();
     void load(const std::string& path);
     void parse(const std::string& line);
+    void forEachForest(std::function <void (TreeNode*)>  callback);
+
 
 private:
+    //xmlForest(const std::basic_string<char> basicString);
 
-    std::unique_ptr<TreeNode> root_node;
-    std::string read_file(const std::string& path);
+    std::unique_ptr<TreeNode> rootNode;
+    std::string readFile(const std::string& path);
     std:: string getTag(const std::string& line, int& pos);
     std:: string getValue(const std::string& line, int& pos);
     std::unique_ptr<TreeNode> loadNode(const std::string& line, int& pos);
-    void printNode(const std::unique_ptr<TreeNode>& node, int depth);
+
+
 };
 
-
-#endif //XMLFABRIC_XML_H

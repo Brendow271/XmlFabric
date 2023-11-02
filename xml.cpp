@@ -1,13 +1,23 @@
 #include "xml.h"
 
-std::string TreeNode:: toString() {
-    std::string str = "<" + tag + " " + value + ">";
-    for (const auto &child: children) {
-        str += child->toString();
+std::string TreeNode:: toString(int depth) {
+    std:: string tabStr = "";
+    for (int i = 0; i < depth; ++i) {
+        tabStr += "\t";
     }
-    str += "</" + tag + ">";
+    std::string str = tabStr + "<" + tag + " value=\""+ value + "\">\n";
+    for (const auto &child: children) {
+        str += child->toString(depth + 1);
+    }
+    str += tabStr + "</" + tag + ">\n";
     return str;
 }
+
+void TreeNode:: forEach(std::function <void (TreeNode*)>  callback) {
+    for(const auto &child: children)
+        child->forEach(callback);
+    return callback(this);
+};
 
 void xmlForest:: save(const std::string& filename) {
     std::ofstream file(filename);
@@ -18,20 +28,24 @@ void xmlForest:: save(const std::string& filename) {
 }
 
 void xmlForest:: print() {
-    printNode(root, 0);
+    std:: cout << toStringForest();
 }
 
 void xmlForest:: load(const std::string& path) {
-    const std::string line = read_file(path);
+    const std::string line = readFile(path);
     parse(line);
 };
 
 void xmlForest:: parse(const std::string& line) {
     int pos = 0;
-    root_node = loadNode(line, pos);
+    rootNode = loadNode(line, pos);
 };
 
-std::string xmlForest:: read_file(const std::string& path) {
+void xmlForest:: forEachForest(std::function <void (TreeNode*)>  callback){
+    rootNode->forEach(callback);
+};
+
+std:: string xmlForest:: readFile(const std::string& path) {
     std::ifstream file(path);
     if (!file) {
         throw std::runtime_error("File not found");
@@ -54,12 +68,12 @@ std:: string xmlForest:: getTag(const std::string& line, int& pos)
 
 std:: string xmlForest:: getValue(const std::string& line, int& pos)
 {
-    size_t startValue = line.find("\"") + 1;
+    size_t startValue = line.find("\"", pos) + 1;
     size_t endValue = line.find("\"", startValue);
     return line.substr(startValue, endValue - startValue);
 }
 
-std::unique_ptr<TreeNode> xmlForest:: loadNode(const std::string& line, int& pos) {
+std:: unique_ptr<TreeNode> xmlForest:: loadNode(const std::string& line, int& pos) {
 
     std::string tag = getTag(line, pos);
     std::string value = getValue(line, pos);
@@ -74,12 +88,7 @@ std::unique_ptr<TreeNode> xmlForest:: loadNode(const std::string& line, int& pos
     return node;
 }
 
-void xmlForest:: printNode(const std::unique_ptr<TreeNode>& node, int depth) {
-    for (int i = 0; i < depth; ++i) {
-        std::cout << "\t";
-    }
-    std::cout << "<" + node->tag + " value=" + node->value + ">" << std::endl;
-    for (const auto& child : node->children) {
-        printNode(child, depth + 1);
-    }
-}
+
+
+
+//xmlForest::xmlForest(const std::basic_string<char> basicString) {}
