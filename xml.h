@@ -17,17 +17,22 @@ public:
     void addChild(std::unique_ptr<TreeNode> v) {children.push_back(std::move(v));}
     std::string toString(int depth);
     void forEach(std::function <void (TreeNode*)>  callback);
-//    const std::string &getTag() const {
-//        return tag;
-//    }
-//
-//    const std::string &getValue() const {
-//        return value;
-//    }
-//
-//    const std::vector<std::unique_ptr<TreeNode>> &getChildren() const {
-//        return children;
-//    }
+    std::vector<TreeNode*> getChilds();
+
+    class iterator {
+    public:
+        explicit iterator(TreeNode* node);
+
+        iterator& operator ++ ();
+        iterator operator ++ (int);
+        iterator& operator += (int n);
+        TreeNode* operator * () const;
+
+    private:
+        std::vector<TreeNode*> nodes;
+        int indCurNode;
+    };
+
 };
 
 class  xmlForest {
@@ -41,16 +46,12 @@ public:
     void parse(const std::string& line);
     void forEachForest(std::function <void (TreeNode*)>  callback);
 
-
 private:
-    //xmlForest(const std::basic_string<char> basicString);
-
     std::unique_ptr<TreeNode> rootNode;
     std::string readFile(const std::string& path);
     std:: string getTag(const std::string& line, int& pos);
     std:: string getValue(const std::string& line, int& pos);
     std::unique_ptr<TreeNode> loadNode(const std::string& line, int& pos);
-
 
 };
 

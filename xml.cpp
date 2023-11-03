@@ -19,6 +19,50 @@ void TreeNode:: forEach(std::function <void (TreeNode*)>  callback) {
     return callback(this);
 };
 
+std::vector<TreeNode*> TreeNode::getChilds() {
+    std::vector<TreeNode*> vecChilds = {};
+    for (const auto& child : children) {
+        vecChilds.push_back(child.get());
+        std::vector<TreeNode*> vecChildOfChilds = child->getChilds();
+        vecChilds.insert(vecChilds.end(), vecChildOfChilds.begin(), vecChildOfChilds.end());
+    }
+}
+
+
+TreeNode::iterator::iterator(TreeNode *node) {
+    if (node) {
+        nodes = node->getChilds();
+        nodes.insert(nodes.begin(), node);
+    }
+    indCurNode = 0;
+}
+
+TreeNode::iterator &TreeNode::iterator::operator++() {
+    *this += 1;
+    return *this;
+}
+
+TreeNode::iterator TreeNode::iterator::operator++(int) {
+    iterator temp(*this);
+    ++(*this);
+    return temp;
+}
+
+TreeNode::iterator &TreeNode::iterator::operator+=(int n) {
+    indCurNode += n;
+    if (indCurNode > nodes.size()) {
+        indCurNode = nodes.size();
+    }
+    return *this;
+}
+
+TreeNode* TreeNode:: iterator:: operator*() const {
+    if (nodes.empty() || indCurNode == nodes.size()) {
+        return nullptr;
+    }
+    return nodes[indCurNode];
+};
+
 void xmlForest:: save(const std::string& filename) {
     std::ofstream file(filename);
     if (file.is_open()) {
@@ -87,8 +131,3 @@ std:: unique_ptr<TreeNode> xmlForest:: loadNode(const std::string& line, int& po
     }
     return node;
 }
-
-
-
-
-//xmlForest::xmlForest(const std::basic_string<char> basicString) {}
