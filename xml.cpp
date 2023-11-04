@@ -17,7 +17,7 @@ void TreeNode:: forEach(std::function <void (TreeNode*)>  callback) {
     for(const auto &child: children)
         child->forEach(callback);
     return callback(this);
-};
+}
 
 std::vector<TreeNode*> TreeNode::getChilds() {
     std::vector<TreeNode*> vecChilds = {};
@@ -26,8 +26,48 @@ std::vector<TreeNode*> TreeNode::getChilds() {
         std::vector<TreeNode*> vecChildOfChilds = child->getChilds();
         vecChilds.insert(vecChilds.end(), vecChildOfChilds.begin(), vecChildOfChilds.end());
     }
+    return vecChilds;
 }
 
+TreeNode::iterator TreeNode::begin() {
+    return TreeNode::iterator(this);
+}
+
+TreeNode::iterator TreeNode::end() {
+    return TreeNode::iterator(nullptr);
+}
+
+TreeNode::iterator TreeNode::findByTag(const std::string &Tag) {
+    if (this->tag == Tag)
+        return begin();
+    else{
+        for(const auto &child: children)
+        {
+            iterator isFind(child->findByTag(Tag));
+            if (isFind != end())
+            {
+                return isFind;
+            }
+        }
+    }
+    return end();
+}
+
+TreeNode::iterator TreeNode::findByValue(const std::string &Value) {
+    if (this->value == Value)
+        return begin();
+    else{
+        for(const auto &child: children)
+        {
+            iterator isFind(child->findByValue(Value));
+            if (isFind != end())
+            {
+                return isFind;
+            }
+        }
+    }
+    return end();
+}
 
 TreeNode::iterator::iterator(TreeNode *node) {
     if (node) {
@@ -61,6 +101,18 @@ TreeNode* TreeNode:: iterator:: operator*() const {
         return nullptr;
     }
     return nodes[indCurNode];
+}
+
+bool TreeNode::iterator::operator == (const iterator& other) const {
+    return **this == *other;
+}
+
+bool TreeNode::iterator::operator != (const iterator& other) const {
+    return !(*this == other);
+}
+
+TreeNode* TreeNode::iterator::operator -> () const {
+    return **this;
 };
 
 void xmlForest:: save(const std::string& filename) {
@@ -78,16 +130,16 @@ void xmlForest:: print() {
 void xmlForest:: load(const std::string& path) {
     const std::string line = readFile(path);
     parse(line);
-};
+}
 
 void xmlForest:: parse(const std::string& line) {
     int pos = 0;
     rootNode = loadNode(line, pos);
-};
+}
 
 void xmlForest:: forEachForest(std::function <void (TreeNode*)>  callback){
     rootNode->forEach(callback);
-};
+}
 
 std:: string xmlForest:: readFile(const std::string& path) {
     std::ifstream file(path);
@@ -95,7 +147,7 @@ std:: string xmlForest:: readFile(const std::string& path) {
         throw std::runtime_error("File not found");
     }
     return std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-};
+}
 
 std:: string xmlForest:: getTag(const std::string& line, int& pos)
 {
@@ -122,12 +174,25 @@ std:: unique_ptr<TreeNode> xmlForest:: loadNode(const std::string& line, int& po
     std::string tag = getTag(line, pos);
     std::string value = getValue(line, pos);
     auto node = std::make_unique<TreeNode>(tag, value);
-    std::string next_tag = getTag(line, pos);
+    std::string nextTag = getTag(line, pos);
 
-    while ((next_tag != ("/" + tag)) && pos < line.size()) {
-        pos -= next_tag.size() + 2;
+    while ((nextTag != ("/" + tag)) && pos < line.size()) {
+        pos -= nextTag.size() + 2;
         node->addChild(loadNode(line, pos));
-        next_tag = getTag(line, pos);
+        nextTag = getTag(line, pos);
     }
     return node;
 }
+TreeNode::iterator xmlForest::begin() {
+    return rootNode->begin();
+};
+TreeNode::iterator xmlForest::end() {
+    return rootNode->end();
+}
+
+TreeNode::iterator xmlForest::findByTag(const std::string& tag) {
+    return rootNode->findByTag(tag);
+};
+TreeNode::iterator xmlForest::findByValue(const std::string& value) {
+    return rootNode->findByValue(value);
+};

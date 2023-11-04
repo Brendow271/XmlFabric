@@ -27,12 +27,19 @@ public:
         iterator operator ++ (int);
         iterator& operator += (int n);
         TreeNode* operator * () const;
+        TreeNode* operator -> () const;
+        bool operator == (const iterator& other) const;
+        bool operator != (const iterator& other) const;
 
     private:
         std::vector<TreeNode*> nodes;
         int indCurNode;
     };
 
+    iterator begin();
+    iterator end();
+    iterator findByTag(const std::string &Tag);
+    iterator findByValue(const std::string &Value);
 };
 
 class  xmlForest {
@@ -45,6 +52,11 @@ public:
     void load(const std::string& path);
     void parse(const std::string& line);
     void forEachForest(std::function <void (TreeNode*)>  callback);
+
+    TreeNode::iterator begin();
+    TreeNode::iterator end();
+    TreeNode::iterator findByTag(const std::string &tag);
+    TreeNode::iterator findByValue(const std::string &value);
 
 private:
     std::unique_ptr<TreeNode> rootNode;
