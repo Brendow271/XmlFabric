@@ -29,6 +29,14 @@ std::vector<TreeNode*> TreeNode::getChilds() {
     return vecChilds;
 }
 
+const std::string &TreeNode::getTag() const {
+    return tag;
+}
+
+const std::string &TreeNode::getValue() const {
+    return value;
+}
+
 TreeNode::iterator TreeNode::begin() {
     return TreeNode::iterator(this);
 }

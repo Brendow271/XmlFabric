@@ -7,6 +7,6 @@ int main() {
 //    forestLoad.print();
 //    forestLoad.save("test.xml");
     TreeNode :: iterator test = forestLoad.findByTag("Lastname");
-    std:: cout << test->tag;
+    std:: cout << test->getTag();
     return 0;
 }

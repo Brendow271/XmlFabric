@@ -9,15 +9,13 @@
 
 class TreeNode {
 public:
-    std::string tag;
-    std::string value;
-    std::vector<std::unique_ptr<TreeNode>> children;
-
     TreeNode(std::string t, std::string v) : tag(std::move(t)), value(std::move(v)) {}
     void addChild(std::unique_ptr<TreeNode> v) {children.push_back(std::move(v));}
     std::string toString(int depth);
     void forEach(std::function <void (TreeNode*)>  callback);
     std::vector<TreeNode*> getChilds();
+    const std::string &getTag() const;
+    const std::string &getValue() const;
 
     class iterator {
     public:
@@ -40,6 +38,12 @@ public:
     iterator end();
     iterator findByTag(const std::string &Tag);
     iterator findByValue(const std::string &Value);
+
+private:
+    std::string tag;
+    std::string value;
+    std::vector<std::unique_ptr<TreeNode>> children;
+
 };
 
 class  xmlForest {
