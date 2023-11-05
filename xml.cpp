@@ -77,6 +77,45 @@ TreeNode::iterator TreeNode::findByValue(const std::string &Value) {
     return end();
 }
 
+const std::vector<std::unique_ptr<TreeNode>> &TreeNode::getChildren() const {
+    return children;
+}
+
+bool TreeNode::erase(TreeNode::iterator iter, TreeNode* nodeParent) {
+
+    for (auto &child: children) {
+
+        if (iter == child.get()->end()) {
+            return false;
+        }
+
+        if (*iter == child.get()) {
+            // перемещение
+            for (int i = 0; i < child->children.size(); i++) {
+                nodeParent->addChild(std::move(child->children[i]));
+            }
+            //удаление
+            std::vector<std::unique_ptr<TreeNode>> &vecParent = this->children;
+            for (int i = 0; i < vecParent.size(); i++)
+                if (vecParent[i].get() == child.get()) {
+                    vecParent[i].reset();
+                    vecParent.erase(vecParent.begin() + i);
+                    break;
+                }
+            return true;
+        }
+        else
+        {
+            if (nodeParent == this){
+                child->erase(iter, nodeParent);
+            }
+            else {
+                child->erase(iter, child.get());
+            }
+        };
+    }
+}
+
 TreeNode::iterator::iterator(TreeNode *node) {
     if (node) {
         nodes = node->getChilds();
@@ -203,4 +242,18 @@ TreeNode::iterator xmlForest::findByTag(const std::string& tag) {
 };
 TreeNode::iterator xmlForest::findByValue(const std::string& value) {
     return rootNode->findByValue(value);
-};
+}
+
+TreeNode::iterator xmlForest::add(std::string &tag, std::string &value, TreeNode::iterator iterPlace) {
+    std:: unique_ptr<TreeNode> node(new TreeNode(tag,value));
+    iterPlace->addChild(std:: move(node));
+    return TreeNode:: iterator(node.get());
+}
+
+bool xmlForest::erase(TreeNode::iterator iter)
+{
+    if (*iter == rootNode.get()) {
+        return false;
+    }
+    rootNode->erase(iter, rootNode.get());
+}
