@@ -1,0 +1,16 @@
+<Animal value="">
+	<Cat value="1">
+		<MeowVolume value="11">
+			<eyeColor value="Blue">
+			</eyeColor>
+		</MeowVolume>
+		<Name value="">
+			<Lastname value="Igor">
+			</Lastname>
+		</Name>
+	</Cat>
+	<Dog value="2">
+		<age value="12">
+		</age>
+	</Dog>
+</Animal>
