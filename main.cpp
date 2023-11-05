@@ -2,7 +2,7 @@
 #include "XMLResource.h"
 
 int main() {
-    std::unique_ptr<XMLResource> xmlRes = XMLResource::create("..\\testTreeInput.xml");
+    auto xmlRes = XMLResource::create("..\\testTreeInput.xml");
     xmlRes->print();
 
     std::cout << std::endl;

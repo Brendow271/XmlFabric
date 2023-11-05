@@ -33,5 +33,6 @@ public:
 private:
     std::unique_ptr<xmlForest> xmlTree;
     XMLResource(const std::string &path);
+    XMLResource() = default;
 };
 
