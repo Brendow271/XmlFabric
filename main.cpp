@@ -1,13 +1,8 @@
 #include "xml.h"
+#include "XMLResource.h"
 
 int main() {
-    xmlForest forestLoad;
-    forestLoad.load("testTree.xml");
-//    forestLoad.forEachForest([](TreeNode* node) {std:: cout << node->tag << std:: endl;});
-//    forestLoad.print();
-//    forestLoad.save("test.xml");
-   //TreeNode:: iterator test =  forestLoad.findByTag("MeowVolume");
-    forestLoad.erase(forestLoad.findByValue("igor"));
-    forestLoad.print();
+    std::unique_ptr<XMLResource> resource = XMLResource::create("testTree.xml");
+
     return 0;
 }

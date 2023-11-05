@@ -163,6 +163,10 @@ TreeNode* TreeNode::iterator::operator -> () const {
     return **this;
 };
 
+xmlForest::xmlForest(const std::string &path) {
+    load(path);
+}
+
 void xmlForest:: save(const std::string& filename) {
     std::ofstream file(filename);
     if (file.is_open()) {
@@ -258,3 +262,5 @@ bool xmlForest::erase(TreeNode::iterator iter)
     }
     rootNode->erase(iter, rootNode.get());
 }
+
+

@@ -28,7 +28,7 @@ public:
 
     class iterator {
     public:
-        explicit iterator(TreeNode *node);
+        iterator(TreeNode *node);
 
         iterator &operator++();
 
@@ -70,6 +70,8 @@ class xmlForest {
 public:
 
     xmlForest() = default;
+    xmlForest(const std::string& path);
+    ~xmlForest() = default;
 
     std::string toStringForest() { return rootNode->toString(0); }
 
