@@ -93,7 +93,7 @@ public:
 
     TreeNode::iterator findByValue(const std::string &value);
 
-    TreeNode::iterator add(std::string &tag, std::string &value, TreeNode::iterator iterPlace);
+    TreeNode::iterator add(std::string tag, std::string value, TreeNode::iterator iterPlace);
 
     bool erase(TreeNode::iterator it);
 

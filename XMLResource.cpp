@@ -35,7 +35,7 @@ TreeNode::iterator XMLResource::findByTag(const std::string& tag) {
 TreeNode::iterator XMLResource::findByValue(const std::string& tag) {
     return xmlTree->findByValue(tag);
 };
-TreeNode::iterator XMLResource::add(std::string &tag, std::string &value, TreeNode::iterator iterPlace) {
+TreeNode::iterator XMLResource::add(std::string tag, std::string value, TreeNode::iterator iterPlace) {
     return xmlTree->add(tag, value, iterPlace);
 };
 bool XMLResource::erase(TreeNode::iterator it) {

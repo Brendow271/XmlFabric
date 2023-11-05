@@ -249,7 +249,7 @@ TreeNode::iterator xmlForest::findByValue(const std::string& value) {
     return rootNode->findByValue(value);
 }
 
-TreeNode::iterator xmlForest::add(std::string &tag, std::string &value, TreeNode::iterator iterPlace) {
+TreeNode::iterator xmlForest::add(std::string tag, std::string value, TreeNode::iterator iterPlace) {
     std:: unique_ptr<TreeNode> node(new TreeNode(tag,value));
     iterPlace->addChild(std:: move(node));
     return TreeNode:: iterator(node.get());
