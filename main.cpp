@@ -7,7 +7,7 @@ int main() {
 //    forestLoad.print();
 //    forestLoad.save("test.xml");
    //TreeNode:: iterator test =  forestLoad.findByTag("MeowVolume");
-    forestLoad.erase(forestLoad.findByTag("MeowVolume"));
+    forestLoad.erase(forestLoad.findByValue("igor"));
     forestLoad.print();
     return 0;
 }

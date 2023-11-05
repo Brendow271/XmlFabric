@@ -90,11 +90,9 @@ bool TreeNode::erase(TreeNode::iterator iter, TreeNode* nodeParent) {
         }
 
         if (*iter == child.get()) {
-            // перемещение
             for (int i = 0; i < child->children.size(); i++) {
                 nodeParent->addChild(std::move(child->children[i]));
             }
-            //удаление
             std::vector<std::unique_ptr<TreeNode>> &vecParent = this->children;
             for (int i = 0; i < vecParent.size(); i++)
                 if (vecParent[i].get() == child.get()) {
@@ -107,13 +105,16 @@ bool TreeNode::erase(TreeNode::iterator iter, TreeNode* nodeParent) {
         else
         {
             if (nodeParent == this){
-                child->erase(iter, nodeParent);
+                if (child->erase(iter, nodeParent))
+                    return true;
             }
             else {
-                child->erase(iter, child.get());
+                if(child->erase(iter, child.get()))
+                    return true;
             }
         };
     }
+    return false;
 }
 
 TreeNode::iterator::iterator(TreeNode *node) {
